@@ -6,6 +6,9 @@ import java.nio.file.Path
 import kotlin.io.path.notExists
 
 object ConfigHelper {
+    var config: HybridAquaticConfig = HybridAquaticConfig()
+        private set
+
     fun initializeConfig(configFile: Path = CommonClass.CONFIG_FILE): HybridAquaticConfigHandler {
         val logger = Constants.LOG
         val configHandler = HybridAquaticConfigHandler(configFile.toFile())
@@ -30,6 +33,7 @@ object ConfigHelper {
                 logger.info("${Constants.MOD_NAME} config reset, the old config has been backed up to \"${configHandler.backupFile}\"")
             }
         }
+        config = configHandler.config
         return configHandler
     }
 }

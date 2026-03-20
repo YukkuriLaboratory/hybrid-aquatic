@@ -2,6 +2,7 @@ package dev.hybridlabs.aquatic.mixin.client;
 
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
+import dev.hybridlabs.aquatic.config.ConfigHelper;
 import dev.hybridlabs.aquatic.item.HybridAquaticItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -28,7 +29,8 @@ public class InGameHudMixin {
 
         if (player != null && client.options.getCameraType().isFirstPerson()) {
             ItemStack helmet = player.getInventory().getArmor(3);
-            if (helmet.getItem() == HybridAquaticItems.INSTANCE.getDIVING_HELMET().get()) {
+            if (helmet.getItem() == HybridAquaticItems.INSTANCE.getDIVING_HELMET().get()
+                    && ConfigHelper.INSTANCE.getConfig().getEnableDivingHelmetOverlay()) {
                 renderDivingHelmetOverlay(context);
             }
         }

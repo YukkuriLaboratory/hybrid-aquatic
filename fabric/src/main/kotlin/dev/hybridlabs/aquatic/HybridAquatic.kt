@@ -75,13 +75,13 @@ object HybridAquatic : ModInitializer {
         HybridAquaticLootPoolEntryTypes
         LootTableModifications.registerLootModifications()
 
-        FeatureBiomeModifications.registerBiomeModifications()
-
         SpawnRestrictionRegistry.registerSpawnRestrictions()
-
 
         registerDynamicRegistries()
         val configHandler = ConfigHelper.initializeConfig(CommonClass.CONFIG_FILE)
+
+        FeatureBiomeModifications.registerBiomeModifications(configHandler.config)
+
         if (configHandler.config.enableWanderingTraderTrades) {
             registerWanderingTraderTrades()
         }
@@ -114,7 +114,6 @@ object HybridAquatic : ModInitializer {
             }
     }
 
-
     private fun registerFlammables(registry: FlammableBlockRegistry) {
         // same as vanilla grass
         registry.add(HybridAquaticPlatformBlocks.DUNEGRASS.get(), 60, 100)
@@ -135,11 +134,11 @@ object HybridAquatic : ModInitializer {
     private fun registerStrippables() {
         StrippableBlockRegistry.register(
             HybridAquaticPlatformBlocks.DRIFTWOOD_LOG.get(),
-            HybridAquaticPlatformBlocks.STRIPPED_DRIFTWOOD_LOG.get()
+            HybridAquaticPlatformBlocks.STRIPPED_DRIFTWOOD_LOG.get(),
         )
         StrippableBlockRegistry.register(
             HybridAquaticPlatformBlocks.DRIFTWOOD_WOOD.get(),
-            HybridAquaticPlatformBlocks.STRIPPED_DRIFTWOOD_WOOD.get()
+            HybridAquaticPlatformBlocks.STRIPPED_DRIFTWOOD_WOOD.get(),
         )
     }
 
@@ -151,7 +150,7 @@ object HybridAquatic : ModInitializer {
                 config.type,
                 config.weight,
                 config.minGroupSize,
-                config.maxGroupSize
+                config.maxGroupSize,
             )
         }
     }

@@ -31,10 +31,8 @@ import net.minecraftforge.registries.ForgeRegistries.Keys.STRUCTURE_MODIFIERS
 @Suppress("Unused", "UnusedExpression")
 @EventBusSubscriber(modid = Constants.FORGE_MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 object DataGenerators {
-
     @SubscribeEvent
     fun gatherData(event: GatherDataEvent) {
-
         HybridAquaticPlacedFeatures
 
         val generator = event.generator
@@ -45,26 +43,28 @@ object DataGenerators {
         val lookupProvider = event.lookupProvider
 
         builder.add(BIOME_MODIFIERS)
-        { context ->
-            registerBiomeSpawns(context)
-            registerFeatures(context)
-        }
+            { context ->
+                registerBiomeSpawns(context)
+                registerFeatures(context)
+            }
 
         builder.add(STRUCTURE_MODIFIERS)
-        { context ->
-            registerStructureSpawnModifiers(context)
-        }
+            { context ->
+                registerStructureSpawnModifiers(context)
+            }
 
         generator.addProvider(
-            event.includeServer(), DatapackBuiltinEntriesProvider(
+            event.includeServer(),
+            DatapackBuiltinEntriesProvider(
                 packOutput,
                 lookupProvider,
                 builder,
-                setOf(Constants.MOD_ID)
-            )
+                setOf(Constants.MOD_ID),
+            ),
         )
         generator.addProvider(
-            event.includeServer(), HAGlobalLootModifierProvider(packOutput)
+            event.includeServer(),
+            HAGlobalLootModifierProvider(packOutput),
         )
     }
 
@@ -73,13 +73,14 @@ object DataGenerators {
      */
     private fun registerStructureSpawnModifiers(context: BootstapContext<StructureModifier>) {
         for (structureModifier in BuiltinSpawnModifiers) {
-            val key = ResourceKey.create(
-                STRUCTURE_MODIFIERS,
-                CommonClass.locate(structureModifier.id)
-            )
+            val key =
+                ResourceKey.create(
+                    STRUCTURE_MODIFIERS,
+                    CommonClass.locate(structureModifier.id),
+                )
             context.register(
                 key,
-                StructureSpawnModifier(structureModifier)
+                StructureSpawnModifier(structureModifier),
             )
         }
     }
@@ -87,24 +88,23 @@ object DataGenerators {
     /**
      * Create Forge biome modifiers to add placed features.
      */
-    private fun registerFeatures(
-        context: BootstapContext<BiomeModifier>,
-    ) {
+    private fun registerFeatures(context: BootstapContext<BiomeModifier>) {
         val biomeRegistry = context.lookup(Registries.BIOME)
         val featureRegistry = context.lookup(Registries.PLACED_FEATURE)
         for (addition in BiomeFeatureAddition.builtIn) {
-
             val location = "${addition.placedFeature.location().path}_${addition.biomeTag.location.path}"
-            val key = ResourceKey.create(
-                BIOME_MODIFIERS,
-                CommonClass.locate(location)
-            )
+            val key =
+                ResourceKey.create(
+                    BIOME_MODIFIERS,
+                    CommonClass.locate(location),
+                )
             context.register(
-                key, ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                key,
+                ForgeBiomeModifiers.AddFeaturesBiomeModifier(
                     biomeRegistry.getOrThrow(addition.biomeTag),
                     HolderSet.direct(featureRegistry.getOrThrow(addition.placedFeature)),
-                    addition.step
-                )
+                    addition.step,
+                ),
             )
         }
     }
@@ -112,32 +112,31 @@ object DataGenerators {
     /**
      * Create Forge biome modifiers to add mob spawns based on the config.
      */
-    private fun registerBiomeSpawns(
-        context: BootstapContext<BiomeModifier>,
-    ) {
+    private fun registerBiomeSpawns(context: BootstapContext<BiomeModifier>) {
         val configHandler = initializeConfig(CommonClass.CONFIG_FILE)
         val biomeRegistry = context.lookup(Registries.BIOME)
         for (spawnConfig in configHandler.defaultConfig.entitySpawnConfig) {
-
             val location = "${spawnConfig.type.toShortString()}_${spawnConfig.biomes.location.path}"
-            val key = ResourceKey.create(
-                BIOME_MODIFIERS, CommonClass.locate(location)
-            )
+            val key =
+                ResourceKey.create(
+                    BIOME_MODIFIERS,
+                    CommonClass.locate(location),
+                )
 
             context.register(
-                key, ForgeBiomeModifiers.AddSpawnsBiomeModifier(
+                key,
+                ForgeBiomeModifiers.AddSpawnsBiomeModifier(
                     biomeRegistry.get(spawnConfig.biomes).get(),
                     listOf(
                         MobSpawnSettings.SpawnerData(
                             spawnConfig.type,
                             spawnConfig.weight,
                             spawnConfig.minGroupSize,
-                            spawnConfig.maxGroupSize
-                        )
-                    )
-                )
+                            spawnConfig.maxGroupSize,
+                        ),
+                    ),
+                ),
             )
-
         }
     }
 }

@@ -8,20 +8,28 @@ data class HybridAquaticConfig(
      * The version of the data stored.
      * Increase when the config needs to be reset, i.e. when new entity spawn configs are added.
      */
-    val dataVersion: Int = 7,
+    val dataVersion: Int = 8,
     val enableWanderingTraderTrades: Boolean = true,
     val enableVillagerTrades: Boolean = true,
-
+    val enableMessageInABottle: Boolean = false,
+    val enableDivingHelmetOverlay: Boolean = false,
     val entitySpawnConfig: List<EntitySpawnConfig> = EntitySpawnConfigGenerator.generate(),
 ) {
     companion object {
-        val CODEC: Codec<HybridAquaticConfig> = RecordCodecBuilder.create { instance ->
-            instance.group(
-                Codec.INT.fieldOf("data_version").forGetter(HybridAquaticConfig::dataVersion),
-                Codec.BOOL.fieldOf("enable_wandering_trader_trades").forGetter(HybridAquaticConfig::enableWanderingTraderTrades),
-                Codec.BOOL.fieldOf("enable_villager_trades").forGetter(HybridAquaticConfig::enableVillagerTrades),
-                EntitySpawnConfig.CODEC.listOf().fieldOf("spawn_configuration").forGetter(HybridAquaticConfig::entitySpawnConfig),
-            ).apply(instance, ::HybridAquaticConfig)
-        }
+        val CODEC: Codec<HybridAquaticConfig> =
+            RecordCodecBuilder.create { instance ->
+                instance
+                    .group(
+                        Codec.INT.fieldOf("data_version").forGetter(HybridAquaticConfig::dataVersion),
+                        Codec.BOOL.fieldOf("enable_wandering_trader_trades").forGetter(HybridAquaticConfig::enableWanderingTraderTrades),
+                        Codec.BOOL.fieldOf("enable_villager_trades").forGetter(HybridAquaticConfig::enableVillagerTrades),
+                        Codec.BOOL.fieldOf("enable_message_in_a_bottle").forGetter(HybridAquaticConfig::enableMessageInABottle),
+                        Codec.BOOL.fieldOf("enable_diving_helmet_overlay").forGetter(HybridAquaticConfig::enableDivingHelmetOverlay),
+                        EntitySpawnConfig.CODEC
+                            .listOf()
+                            .fieldOf("spawn_configuration")
+                            .forGetter(HybridAquaticConfig::entitySpawnConfig),
+                    ).apply(instance, ::HybridAquaticConfig)
+            }
     }
 }
