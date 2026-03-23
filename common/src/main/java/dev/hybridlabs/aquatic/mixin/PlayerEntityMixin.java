@@ -2,6 +2,7 @@ package dev.hybridlabs.aquatic.mixin;
 
 import com.google.common.collect.ImmutableList;
 import dev.hybridlabs.aquatic.access.CustomPlayerEntityData;
+import dev.hybridlabs.aquatic.config.ConfigHelper;
 import dev.hybridlabs.aquatic.effect.HybridAquaticMobEffects;
 import dev.hybridlabs.aquatic.entity.shark.HybridAquaticSharkEntity;
 import dev.hybridlabs.aquatic.item.HybridAquaticItems;
@@ -131,7 +132,7 @@ public abstract class PlayerEntityMixin extends Entity implements CustomPlayerEn
                 player.addEffect(
                         new MobEffectInstance(
                                 MobEffects.WATER_BREATHING, 600, 0, false, false, false));
-            } else {
+            } else if (ConfigHelper.INSTANCE.getConfig().getEnableDivingHelmetOverlay()) {
                 player.addEffect(
                         new MobEffectInstance(
                                 HybridAquaticMobEffects.INSTANCE.getCLARITY().get(),
