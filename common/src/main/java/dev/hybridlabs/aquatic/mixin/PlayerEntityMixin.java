@@ -141,6 +141,8 @@ public abstract class PlayerEntityMixin extends Entity implements CustomPlayerEn
                                 false,
                                 false,
                                 false));
+            } else if (player.hasEffect(HybridAquaticMobEffects.INSTANCE.getCLARITY().get())) {
+                player.removeEffect(HybridAquaticMobEffects.INSTANCE.getCLARITY().get());
             }
         }
     }
